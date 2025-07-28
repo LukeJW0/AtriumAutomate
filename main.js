@@ -1,4 +1,4 @@
-// --- Create floating window container ---
+// Floating Div Container
 const windowDiv = document.createElement('div');
 windowDiv.style.position = 'fixed';
 windowDiv.style.top = '100px';
@@ -13,7 +13,7 @@ windowDiv.style.fontFamily = 'sans-serif';
 windowDiv.style.width = '320px';
 windowDiv.id = 'programCardWindow';
 
-// --- Dragging ---
+// Dragging
 let isDragging = false, offsetX, offsetY;
 
 windowDiv.addEventListener('mousedown', (e) => {
@@ -33,7 +33,7 @@ document.addEventListener('mouseup', () => {
   isDragging = false;
 });
 
-// --- Title bar ---
+// Title
 const titleBar = document.createElement('div');
 titleBar.style.display = 'flex';
 titleBar.style.justifyContent = 'space-between';
@@ -47,6 +47,7 @@ title.style.margin = '0';
 title.style.fontSize = '18px';
 title.id = 'programCardTitle';
 
+// Close Button
 const closeBtn = document.createElement('span');
 closeBtn.textContent = 'X';
 closeBtn.style.cursor = 'pointer';
@@ -60,7 +61,7 @@ titleBar.appendChild(title);
 titleBar.appendChild(closeBtn);
 windowDiv.appendChild(titleBar);
 
-// --- Input + select row ---
+// Input Row
 const rowDiv = document.createElement('div');
 rowDiv.style.display = 'flex';
 rowDiv.style.gap = '8px';
@@ -86,7 +87,7 @@ input.addEventListener('keydown', (event) => {
 
 rowDiv.appendChild(input);
 
-// Select
+// Selection Input
 const select = document.createElement('select');
 select.style.width = '60%';
 select.style.height = '34px';
@@ -156,7 +157,7 @@ buttonDiv.style.display = 'flex';
 buttonDiv.style.gap = '8px';
 buttonDiv.style.marginBottom = '12px'; 
 
-// --- Submit button ---
+// Submit Button
 const submit = document.createElement('button');
 submit.textContent = 'Add';
 submit.style.padding = '8px 12px';
@@ -235,7 +236,7 @@ clear.onclick = () => {
   });
 };
 
-// --- Program button ---
+// Program Button
 const program = document.createElement('button');
 program.textContent = 'Program';
 program.style.padding = '8px 12px';
@@ -285,6 +286,7 @@ buttonDiv.appendChild(program);
 windowDiv.appendChild(buttonDiv);
 document.body.appendChild(windowDiv);
 
+// Gets the "person" id assigned to the access card number.
 async function getPerson(cardNum) {
   const response = await fetch('https://utah.atriumcampus.com/people/get_people/search', {
     method: 'POST',
@@ -318,6 +320,7 @@ async function getPerson(cardNum) {
   return null;
 }
 
+// Sets the access of the "person" with the given ID to the given building number.
 async function setAccess(person, bldg) {
   const response = fetch('https://utah.atriumcampus.com/systems/people/add_access_group', {
   method: 'POST',
@@ -345,6 +348,7 @@ async function setAccess(person, bldg) {
   });
 }
 
+// Returns what buildings a person already has, and what building they do not have.
 function getValueDifferences(accessGroups, options) {
   const accessValues = new Set(accessGroups.map(group => group.value));
   const optionValues = new Set(options.map(opt => opt.value));
@@ -355,6 +359,7 @@ function getValueDifferences(accessGroups, options) {
   return [...notInOptions, ...notInAccess];
 }
 
+// Returns the access of a "person" with the given ID.
 async function getAccess(person) {
   const response = await fetch('https://utah.atriumcampus.com/systems/people/access_group_list/' + person, {
     method: 'POST',
@@ -385,6 +390,7 @@ async function getAccess(person) {
   
 }
 
+// Removes access to each given building from a "person" with the given ID.
 async function removeAccess(bldgs, person) {
   for (const bldg of bldgs) {
     let response = fetch('https://utah.atriumcampus.com/people/delete_access_group', {
